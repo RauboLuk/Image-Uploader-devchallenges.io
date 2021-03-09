@@ -92,13 +92,14 @@ function App() {
   
   const uploadFile = (event) => {
     event.preventDefault();
-    console.log(event.type);
-    if(event.type === 'dragover'
-      ||!event.target.files
-      || event.target.files.length === 0) return;
-    console.log(event.target.files);
-    setPicture(URL.createObjectURL(event.target.files[0]));
+    console.log('onDragOver', event.dataTransfer.files[0]);
+    setPicture(URL.createObjectURL(event.dataTransfer.files[0]));
     setLoading(true);
+  }
+
+  const onDragOver = (event) => {
+    event.dataTransfer.dropEffect = 'move';
+    event.preventDefault();
   }
 
   return (
@@ -112,7 +113,7 @@ function App() {
             File should be Jpeg, Png,...
           </Subtitle>
         </Header>
-        <DragNDrop onChange={uploadFile} onDragOver={uploadFile}>
+        <DragNDrop onDrop={uploadFile} onDragOver={onDragOver}>
             {loading
               ? <img id="output" width="200" alt="Preview" src={picture}/>
               : <>
