@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Dimmer, Loader, Icon } from 'semantic-ui-react';
 
@@ -77,7 +77,26 @@ function App() {
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    console.log(picture);
+  }, [picture]);
+
+  const uploadFileButton = (event) => {
+    event.preventDefault();
+    console.log(event.target.files);
+    if(!event.target.files
+      || event.target.files.length === 0) return;
+    setPicture(URL.createObjectURL(event.target.files[0]));
+    setLoading(true);
+  }
+  
   const uploadFile = (event) => {
+    event.preventDefault();
+    console.log(event.type);
+    if(event.type === 'dragover'
+      ||!event.target.files
+      || event.target.files.length === 0) return;
+    console.log(event.target.files);
     setPicture(URL.createObjectURL(event.target.files[0]));
     setLoading(true);
   }
@@ -93,7 +112,7 @@ function App() {
             File should be Jpeg, Png,...
           </Subtitle>
         </Header>
-        <DragNDrop>
+        <DragNDrop onChange={uploadFile} onDragOver={uploadFile}>
             {loading
               ? <img id="output" width="200" alt="Preview" src={picture}/>
               : <>
@@ -105,7 +124,7 @@ function App() {
         <Or>
           Or
         </Or>
-        <Button type="file" accept="image/*" onChange={uploadFile}/>
+        <Button type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
       <footer>created by LR - devChallenges.io</footer>
     </Main>
