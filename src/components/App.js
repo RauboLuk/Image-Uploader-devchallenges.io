@@ -76,10 +76,18 @@ const Button = styled.input`${theme.button}`
 function App() {
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     console.log(picture);
   }, [picture]);
+
+  const handleError = (msg) => {
+    setError(msg)
+    setTimeout(() => {
+      setError(false)
+    }, 5000)
+  }
 
   const uploadFileButton = (event) => {
     event.preventDefault();
@@ -92,8 +100,14 @@ function App() {
   
   const uploadFile = (event) => {
     event.preventDefault();
-    console.log('onDragOver', event.dataTransfer.files[0]);
-    setPicture(URL.createObjectURL(event.dataTransfer.files[0]));
+    const file = event.dataTransfer.files[0]
+    if(!file.type
+      .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
+        handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
+        return null;
+      }
+    console.log('onDragOver', file);
+    setPicture(URL.createObjectURL(file));
     setLoading(true);
   }
 
@@ -106,6 +120,7 @@ function App() {
     <Main className="App">
       <Frame>
         <Header>
+          {error && error}
           <Title>
             Upload your image
           </Title>
