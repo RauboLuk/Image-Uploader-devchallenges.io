@@ -1,35 +1,26 @@
 const express = require('express')
 const cors = require('cors')
-const multer  = require('multer')
 const bodyParser = require('body-parser')
+const fileUpload = require('express-fileupload');
 
 const app = express()
-const upload = multer({ dest: 'uploads/' })
-
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing 
 // Heroku dynamically sets a port
 const PORT = process.env.PORT || 5000
+
+app.use(fileUpload({
+  createParentPath: true
+}));
 
 app.use(express.static('dist'))
 app.use(cors())
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
-app.use(bodyParser.json())
-
-app.post('/img', upload.single('avatar'), (req, res) => {
-  console.log(req.file);
-  console.log('b', JSON.stringify(req.body));
-  if(!req.file) {
-    res.send({
-        status: false,
-        message: 'No file uploaded'
-    });
-  } else {
-    res.send('ok');
-  }
-})
+app.post('/upload', function(req, res) {
+  console.log(req.get('Content-Type'));
+  console.log(req.files); // the uploaded file object
+  console.log(req.body); // the uploaded file object
+});
 
 app.get('/health', (req, res) => {
   res.send('ok')

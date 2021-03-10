@@ -133,9 +133,17 @@ function App() {
 
   const sendPicture = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/img', {
+    const formData1 = new FormData();
+    const fileField1 = document.querySelector('input[type="file"]');
+
+    formData1.append('avatar', fileField1.files[0]);
+    console.log(formData1.get('avatar'));
+    fetch('http://localhost:5000/upload', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData1,
     })
     .then(response => response.json())
     .then(result => {
@@ -170,19 +178,12 @@ function App() {
         <Or>
           Or
         </Or>
-        <label for="button">
+        <label htmlFor="button">
           <Button>Choose a file</Button>
         </label>
         <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
       <button onClick={sendPicture}>send</button>
-      <form action="/stats" enctype="multipart/form-data" method="post">
-        <div class="form-group">
-          <input type="file" class="form-control-file" name="uploaded_file"/>
-          <input type="text" class="form-control" placeholder="Number of speakers" name="nspeakers"/>
-          <input type="submit" value="Get me the stats!" class="btn btn-default"/>            
-        </div>
-      </form>
       <footer>created by LR - devChallenges.io</footer>
     </Main>
   );
