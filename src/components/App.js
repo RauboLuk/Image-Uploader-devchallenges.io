@@ -135,9 +135,6 @@ function App() {
     e.preventDefault();
     fetch('http://localhost:5000/img', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: formData,
     })
     .then(response => response.json())
@@ -179,6 +176,13 @@ function App() {
         <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
       <button onClick={sendPicture}>send</button>
+      <form action="/stats" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+          <input type="file" class="form-control-file" name="uploaded_file"/>
+          <input type="text" class="form-control" placeholder="Number of speakers" name="nspeakers"/>
+          <input type="submit" value="Get me the stats!" class="btn btn-default"/>            
+        </div>
+      </form>
       <footer>created by LR - devChallenges.io</footer>
     </Main>
   );

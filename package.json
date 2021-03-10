@@ -6,6 +6,8 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "multer": "^1.4.2",
     "react": "^17.0.1",
@@ -19,6 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start-prod": "node app.js",
+    "run-dev": "nodemon app.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -40,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
