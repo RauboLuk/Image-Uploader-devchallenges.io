@@ -85,8 +85,10 @@ const Button = styled.p`${theme.button}`
 
 function App() {
   const [picture, setPicture] = useState(null);
+  const [img, setImg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const formData = new FormData();
 
   useEffect(() => {
     console.log(picture);
@@ -101,9 +103,11 @@ function App() {
 
   const uploadFileButton = (event) => {
     event.preventDefault();
-    console.log(event.target.files);
+    console.log(event.target.files[0]);
     if(!event.target.files
       || event.target.files.length === 0) return;
+    setImg(event.target.files[0]);
+    formData.append('avatar', event.target.files[0]);
     setPicture(URL.createObjectURL(event.target.files[0]));
     setLoading(true);
   }
@@ -125,6 +129,24 @@ function App() {
   const onDragOver = (event) => {
     event.dataTransfer.dropEffect = 'move';
     event.preventDefault();
+  }
+
+  const sendPicture = (e) => {
+    e.preventDefault();
+    fetch('http://localhost:5000/img', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log('Success:', result);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   }
 
   return (
@@ -156,6 +178,7 @@ function App() {
         </label>
         <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
+      <button onClick={sendPicture}>send</button>
       <footer>created by LR - devChallenges.io</footer>
     </Main>
   );
