@@ -83,9 +83,8 @@ const Or = styled.p`
 const Button = styled.p`${theme.button}`
 
 function App() {
-  const [picture, setPicture] = useState(null);
-  const [img, setImg] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [imgPreviewUri, setImgPreviewUri] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
   const [error, setError] = useState(false);
 
   const handleError = (msg) => {
@@ -101,23 +100,22 @@ function App() {
     console.log('dt', event.target.dataTransfer);
     if(!event.target.files
       || event.target.files.length === 0) return;
-    setImg(event.target.files[0]);
-    setPicture(URL.createObjectURL(event.target.files[0]));
-    setLoading(true);
+    setImgFile(event.target.files[0]);
+    setImgPreviewUri(URL.createObjectURL(event.target.files[0]));
   }
   
+  // TODO: TypeError: this._drop is not a function at Object.handleEvent
   const prepareFile = (event) => {
     event.preventDefault();
-    const file = event.dataTransfer.files[0]
+    const file = event.dataTransfer.files[0];
     // TODO add maxsize
     if(!file.type
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
         handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
         return null;
     }
-    setImg(file);
-    setPicture(URL.createObjectURL(file));
-    setLoading(true);
+    setImgFile(file);
+    setImgPreviewUri(URL.createObjectURL(file));
   }
 
   const onDragOver = (event) => {
@@ -129,7 +127,7 @@ function App() {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append('img', img);
+    formData.append('img', imgFile);
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData,
@@ -155,9 +153,9 @@ function App() {
             File should be Jpeg, Png,...
           </Subtitle>
         </Header>
-        <DragNDrop onDrop={prepareFile} onDragOver={onDragOver} isPicture={!!picture}>
-            {loading
-              ? <Preview id="output" width="200" alt="Preview" src={picture}/>
+        <DragNDrop onDrop={prepareFile} onDragOver={onDragOver} isPicture={!!imgPreviewUri}>
+            {!!imgPreviewUri
+              ? <Preview id="output" width="200" alt="Preview" src={imgPreviewUri}/>
               : <>
                 <Icon name='picture' size='massive' />
                 <DnDText>Drag & Drop your image here</DnDText>
