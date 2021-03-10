@@ -18,9 +18,9 @@ const Main = styled.div`
 
 const Frame = styled.div`
   background: #FFFFFF;
-  width: 402px;
-  height: 469px;
-  border-radius: 3%;
+  min-width: 402px;
+  min-height: 469px;
+  border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   padding: 36px 32px;
   display: flex;
@@ -51,10 +51,12 @@ const DragNDrop = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: 100%;
-  height: 50%;
-  border-radius: 3%;
-  border: 1px dashed #97BEF4;
+  width: 338px;
+  height: 224.4px;
+  border-radius: 12px;
+  border: 1px dashed;
+  border-color: ${props => props.isPicture ?
+  "green" : "#97BEF4"}
 `;
 
 const DnDText = styled.p`
@@ -64,6 +66,14 @@ const DnDText = styled.p`
   color: #BDBDBD;
 `
 
+const Preview = styled.img`
+  max-height: 100%;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  border-radius: 12px;
+`;
+
 const Or = styled.p`
   font-size: 12px;
   line-height: 18px;
@@ -71,7 +81,7 @@ const Or = styled.p`
   color: #BDBDBD;
 `
 
-const Button = styled.input`${theme.button}`
+const Button = styled.p`${theme.button}`
 
 function App() {
   const [picture, setPicture] = useState(null);
@@ -101,6 +111,7 @@ function App() {
   const uploadFile = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0]
+    // TODO add maxsize
     if(!file.type
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
         handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
@@ -128,9 +139,9 @@ function App() {
             File should be Jpeg, Png,...
           </Subtitle>
         </Header>
-        <DragNDrop onDrop={uploadFile} onDragOver={onDragOver}>
+        <DragNDrop onDrop={uploadFile} onDragOver={onDragOver} isPicture={!!picture}>
             {loading
-              ? <img id="output" width="200" alt="Preview" src={picture}/>
+              ? <Preview id="output" width="200" alt="Preview" src={picture}/>
               : <>
                 <Icon name='picture' size='massive' />
                 <DnDText>Drag & Drop your image here</DnDText>
@@ -140,7 +151,10 @@ function App() {
         <Or>
           Or
         </Or>
-        <Button type="file" accept="image/*" onChange={uploadFileButton}/>
+        <label for="button">
+          <Button>Choose a file</Button>
+        </label>
+        <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
       <footer>created by LR - devChallenges.io</footer>
     </Main>
