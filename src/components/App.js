@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Dimmer, Loader, Icon } from 'semantic-ui-react';
-
+import { Icon } from 'semantic-ui-react';
 
 import { theme } from '../theme';
 
@@ -88,11 +87,6 @@ function App() {
   const [img, setImg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const formData = new FormData();
-
-  useEffect(() => {
-    console.log(picture);
-  }, [picture]);
 
   const handleError = (msg) => {
     setError(msg)
@@ -104,15 +98,15 @@ function App() {
   const uploadFileButton = (event) => {
     event.preventDefault();
     console.log(event.target.files[0]);
+    console.log('dt', event.target.dataTransfer);
     if(!event.target.files
       || event.target.files.length === 0) return;
     setImg(event.target.files[0]);
-    formData.append('avatar', event.target.files[0]);
     setPicture(URL.createObjectURL(event.target.files[0]));
     setLoading(true);
   }
   
-  const uploadFile = (event) => {
+  const prepareFile = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0]
     // TODO add maxsize
@@ -120,8 +114,8 @@ function App() {
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
         handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
         return null;
-      }
-    console.log('onDragOver', file);
+    }
+    setImg(file);
     setPicture(URL.createObjectURL(file));
     setLoading(true);
   }
@@ -133,17 +127,12 @@ function App() {
 
   const sendPicture = (e) => {
     e.preventDefault();
-    const formData1 = new FormData();
-    const fileField1 = document.querySelector('input[type="file"]');
+    const formData = new FormData();
 
-    formData1.append('avatar', fileField1.files[0]);
-    console.log(formData1.get('avatar'));
+    formData.append('img', img);
     fetch('http://localhost:5000/upload', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      body: formData1,
+      body: formData,
     })
     .then(response => response.json())
     .then(result => {
@@ -166,7 +155,7 @@ function App() {
             File should be Jpeg, Png,...
           </Subtitle>
         </Header>
-        <DragNDrop onDrop={uploadFile} onDragOver={onDragOver} isPicture={!!picture}>
+        <DragNDrop onDrop={prepareFile} onDragOver={onDragOver} isPicture={!!picture}>
             {loading
               ? <Preview id="output" width="200" alt="Preview" src={picture}/>
               : <>

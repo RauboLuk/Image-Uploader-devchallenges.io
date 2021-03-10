@@ -1,11 +1,8 @@
 const express = require('express')
 const cors = require('cors')
-const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload');
 
 const app = express()
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing 
 // Heroku dynamically sets a port
 const PORT = process.env.PORT || 5000
 
@@ -17,9 +14,33 @@ app.use(express.static('dist'))
 app.use(cors())
 
 app.post('/upload', function(req, res) {
-  console.log(req.get('Content-Type'));
-  console.log(req.files); // the uploaded file object
-  console.log(req.body); // the uploaded file object
+  try {
+    if(!req.files) {
+        res.send({
+            status: false,
+            message: 'No file uploaded'
+        });
+    } else {
+        //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+        let img = req.files.img;
+        
+        //Use the mv() method to place the file in upload directory (i.e. "uploads")
+        img.mv('./uploads/' + img.name);
+
+        //send response
+        res.send({
+            status: true,
+            message: 'File is uploaded',
+            data: {
+                name: img.name,
+                mimetype: img.mimetype,
+                size: img.size
+            }
+        });
+    }
+  } catch (err) {
+      res.status(500).send(err);
+  }
 });
 
 app.get('/health', (req, res) => {
