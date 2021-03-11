@@ -83,15 +83,25 @@ const Or = styled.p`
 const Button = styled.p`${theme.button}`
 
 function App() {
-  const [imgPreviewUri, setImgPreviewUri] = useState(null);
-  const [imgFile, setImgFile] = useState(null);
-  const [error, setError] = useState(false);
+  const [imgPreviewUri, setImgPreviewUri] = useState(null)
+  const [imgFile, setImgFile] = useState(null)
+  const [error, setError] = useState(false)
+  const [downloaded, setDownloaded] = useState(false);
 
   const handleError = (msg) => {
     setError(msg)
     setTimeout(() => {
       setError(false)
     }, 5000)
+  }
+
+  const downloadImg = () => {
+    fetch('http://localhost:5000/upload')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        setDownloaded(data)
+      })
   }
 
   const uploadFileButton = (event) => {
@@ -171,6 +181,11 @@ function App() {
         <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
       </Frame>
       <button onClick={sendPicture}>send</button>
+      <div>
+        <button onClick={downloadImg}>send</button>
+        {downloaded && <img alt="downloaded" src={`data:image/jpg;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
+      </div>
+
       <footer>created by LR - devChallenges.io</footer>
     </Main>
   );

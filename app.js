@@ -53,19 +53,31 @@ app.post('/upload', async (req, res) => {
       await newImg.save()
 
       //send response
-      // res.send({
-      //     status: true,
-      //     message: 'File is uploaded',
-      //     data: {
-      //         name: img.name,
-      //         mimetype: img.mimetype,
-      //         size: img.size
-      //     }
-      // })
+      res.send({
+          status: true,
+          message: 'File is uploaded',
+          data: {
+              name: img.name,
+              mimetype: img.mimetype,
+              size: img.size
+          }
+      })
     }
   } catch (err) {
       res.status(500).send(err);
   }
+})
+
+app.get('/upload', (req, res) => {
+  imgModel.findOne({}, (err, items) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('An error occurred', err);
+    }
+    else {
+      res.send({ items: items });
+    }
+  })
 })
 
 app.get('/health', (req, res) => {
