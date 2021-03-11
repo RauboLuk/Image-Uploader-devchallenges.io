@@ -1,11 +1,13 @@
-require('dotenv').config()
+const path = require('path');
+const dotenv = require('dotenv')
 const express = require('express')
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
 
 const app = express()
-// Heroku dynamically sets a port
-const PORT = process.env.PORT || 5000
+
+const envConfig = dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
+const PORT = process.env.PORT || envConfig.PORT
 
 app.use(fileUpload({
   createParentPath: true
