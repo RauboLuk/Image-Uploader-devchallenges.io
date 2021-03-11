@@ -1,6 +1,7 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload')
 
 const app = express()
 // Heroku dynamically sets a port
