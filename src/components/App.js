@@ -7,6 +7,7 @@ import {
 import styled from 'styled-components';
 
 import Upload from './Upload';
+import UploadedImg from './UploadedImg';
 
 const Main = styled.div`
   background: #FAFAFB;
@@ -30,7 +31,7 @@ const Frame = styled.div`
 function App() {
   const [imgPreviewUri, setImgPreviewUri] = useState(null)
   const [imgFile, setImgFile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [downloaded, setDownloaded] = useState(false)
 
@@ -96,6 +97,7 @@ function App() {
     })
     .catch(error => {
       console.error('Error:', error);
+      handleError('Error. Please try again later...');
       setLoading(false)
     });
   }
@@ -118,7 +120,7 @@ function App() {
               />
             </Route>
             <Route path="/:id">
-              <p>hi</p>
+              <UploadedImg />
             </Route>
           </Switch>
         </Frame>

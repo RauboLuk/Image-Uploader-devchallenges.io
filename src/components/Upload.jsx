@@ -94,29 +94,29 @@ const LoaderBar = styled.div`
   height: 6px;
   background: #2F80ED;
   border-radius: 8px;
-  animation:loading 2.2s ease-out infinite;
-  position:relative;
+  animation: loading 2.2s ease-out infinite;
+  position: relative;
 
   @keyframes loading {
     0% {
-      left:0%;
-      right:100%;
+      left: 0%;
+      right: 100%;
       width: 0;
     }
     10% {
-      left:0%;
-      right:75%;
+      left: 0%;
+      right: 75%;
       width: 25%;
     }
     90% {
-      right:0%;
-      left:75%;
+      right: 0%;
+      left: 75%;
       width: 25%;
     }
     100% {
-      left:100%;
-      right:0%;
-      width:0%;
+      left: 100%;
+      right: 0%;
+      width: 0%;
     }
   }
 `
