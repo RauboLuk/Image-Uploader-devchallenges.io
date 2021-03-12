@@ -75,7 +75,7 @@ app.get('/upload', (req, res) => {
       res.status(500).send('An error occurred', err);
     }
     else {
-      res.send({ items: items });
+      res.send({ items });
     }
   })
 })

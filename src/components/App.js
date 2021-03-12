@@ -78,9 +78,21 @@ const Or = styled.p`
   line-height: 18px;
   letter-spacing: -0.035em;
   color: #BDBDBD;
+  margin: 1em;
+`
+const Button = styled.p`
+  font-family: 'Noto Sans';
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.035em;
+  background: ${props => props.color === 'cancel' ? 'firebrick' : '#2F80ED'};
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
 `
 
-const Button = styled.p`${theme.button}`
+// const Button = styled.p`${theme.button}`
 
 function App() {
   const [imgPreviewUri, setImgPreviewUri] = useState(null)
@@ -175,15 +187,23 @@ function App() {
         <Or>
           Or
         </Or>
-        <label htmlFor="button">
-          <Button>Choose a file</Button>
-        </label>
-        <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
+        {!!imgPreviewUri
+          ? <div>
+              <Button onClick={sendPicture}>Upload</Button>
+              <Button onClick={() =>{setImgPreviewUri(null)}} color="cancel">Cancel</Button>
+            </div>
+          : <>
+            <label htmlFor="button">
+              <Button>Choose a file</Button>
+            </label>
+            <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
+          </>
+        }
+        
       </Frame>
-      <button onClick={sendPicture}>send</button>
       <div>
-        <button onClick={downloadImg}>send</button>
-        {downloaded && <img alt="downloaded" src={`data:image/jpg;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
+        <button onClick={downloadImg}>downloadImg</button>
+        {downloaded && <img alt="downloaded" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
       </div>
 
       <footer>created by LR - devChallenges.io</footer>
