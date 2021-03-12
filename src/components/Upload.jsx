@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 
+const Frame = styled.div`
+  min-width: 402px;
+  min-height: 469px;
+  padding: 36px 32px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
 const Header = styled.header`
   margin-bottom: 20px;
 `
@@ -12,7 +22,8 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.p`
-  color: ${props => props.color ? 'firebrick' : '#828282'};
+  color: ${props => props.color ?
+    'firebrick' : '#828282'};
   font-size: 10px;
   line-height: 15px;
 `;
@@ -28,7 +39,7 @@ const DragNDrop = styled.div`
   border-radius: 12px;
   border: 1px dashed;
   border-color: ${props => props.isPicture ?
-  "green" : "#97BEF4"}
+    "green" : "#97BEF4"}
 `;
 
 const DnDText = styled.p`
@@ -65,6 +76,51 @@ const Button = styled.p`
   color: #FFFFFF;
 `
 
+const Loading = styled.div`
+  padding: 36px 32px;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: -0.035em;
+  text-align: start;
+`
+const Loader = styled.div`
+  margin-top: 30px;
+  width: 340px;
+  height: 6px;
+  background: #F2F2F2;
+  border-radius: 8px;
+`
+const LoaderBar = styled.div`
+  height: 6px;
+  background: #2F80ED;
+  border-radius: 8px;
+  animation:loading 2.2s ease-out infinite;
+  position:relative;
+
+  @keyframes loading {
+    0% {
+      left:0%;
+      right:100%;
+      width: 0;
+    }
+    10% {
+      left:0%;
+      right:75%;
+      width: 25%;
+    }
+    90% {
+      right:0%;
+      left:75%;
+      width: 25%;
+    }
+    100% {
+      left:100%;
+      right:0%;
+      width:0%;
+    }
+  }
+`
+
 const Upload = ({
   error,
   prepareFile,
@@ -76,10 +132,14 @@ const Upload = ({
   loading
 }) => {
   if(loading) return (
-    <p>loading</p>
+    <Loading>Uploading...
+      <Loader>
+        <LoaderBar />
+      </Loader>
+    </Loading>
   )
   return (
-    <>
+    <Frame>
       <Header>
         <Title>
           Upload your image
@@ -112,7 +172,7 @@ const Upload = ({
           <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
         </>
       }
-    </>
+    </Frame>
   )
 }
 

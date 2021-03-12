@@ -21,15 +21,8 @@ const Main = styled.div`
 
 const Frame = styled.div`
   background: #FFFFFF;
-  min-width: 402px;
-  min-height: 469px;
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 36px 32px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  justify-content: space-between;
 `;
 
 // const Button = styled.p`${theme.button}`
@@ -37,7 +30,7 @@ const Frame = styled.div`
 function App() {
   const [imgPreviewUri, setImgPreviewUri] = useState(null)
   const [imgFile, setImgFile] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [downloaded, setDownloaded] = useState(false)
 
