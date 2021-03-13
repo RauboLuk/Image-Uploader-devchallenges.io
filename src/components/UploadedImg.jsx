@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { Icon, Input } from 'semantic-ui-react';
-import { useRef } from 'react';
+import { Icon } from 'semantic-ui-react';
+import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router';
 
 const Frame = styled.div`
   min-width: 402px;
@@ -86,11 +87,27 @@ const LoaderBar = styled.div`
   }
 `
 
+const Input = styled.input`
+  background: #F6F8FB !important;
+  border-radius: 8px !important;
+  font-family: Poppins !important;
+  line-height: 12px !important;
+  text-align: center !important;
+  letter-spacing: -0.035em !important;
+  color: #4F4F4F !important;
+`
+
 const UploadedImg = ({
   loading,
-  downloaded
+  downloaded,
+  getImg
 }) => {
   const linkInput = useRef(null)
+  const { id } = useParams();
+
+  useEffect(() => {
+    getImg(id);
+  }, [])
 
   const handleCopy = (e) => {
     e.preventDefault()
@@ -98,13 +115,13 @@ const UploadedImg = ({
     document.execCommand("copy")
   }
   // TODO check what if there is no item i db
-  // if(!downloaded) return (
-  //   <Loading>Loading...
-  //     <Loader>
-  //       <LoaderBar />
-  //     </Loader>
-  //   </Loading>
-  // )
+  if(loading || !downloaded) return (
+    <Loading>Loading...
+      <Loader>
+        <LoaderBar />
+      </Loader>
+    </Loading>
+  )
   return (
     <Frame>
       <Header>
@@ -123,7 +140,7 @@ const UploadedImg = ({
       </DragNDrop>
       {/* Semantic ui input */}
       <div className="ui action input">
-        <input
+        <Input
           type="text"
           value="http://ww.short.url/c0opq"
           readOnly

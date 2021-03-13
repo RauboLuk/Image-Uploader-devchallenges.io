@@ -43,13 +43,13 @@ const App = () => {
     }, 5000)
   }
 
-  const downloadImg = () => {
-    fetch('http://localhost:5000/upload')
+  const getImg = (id) => {
+    fetch(`http://localhost:5000/upload/${id}`)
       .then(response => response.json())
       .then(data => {
         console.log(data)
         setDownloaded(data)
-        setLoading(false);
+        setLoading(false)
       })
   }
 
@@ -124,12 +124,13 @@ const App = () => {
             <UploadedImg
               loading={loading}
               downloaded={downloaded}
+              getImg={getImg}
             />
           </Route>
         </Switch>
       </Frame>
       <div>
-        <button onClick={downloadImg}>downloadImg</button>
+        <button onClick={getImg}>downloadImg</button>
         {downloaded && <img alt="downloaded" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
       </div>
       <footer>created by LR - devChallenges.io</footer>

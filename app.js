@@ -68,8 +68,10 @@ app.post('/upload', async (req, res) => {
   }
 })
 
-app.get('/upload', (req, res) => {
-  imgModel.findOne({}, (err, items) => {
+app.get('/upload/:id', (req, res) => {
+  // TODO error when id is incorrect
+  const id = mongoose.Types.ObjectId(req.params.id)
+  imgModel.findById(id, (err, items) => {
     if (err) {
       console.log(err);
       res.status(500).send('An error occurred', err);
