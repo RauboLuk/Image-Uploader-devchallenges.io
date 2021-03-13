@@ -124,10 +124,9 @@ const UploadedImg = ({
       {/* Semantic ui input */}
       <div className="ui action input">
         <input
-          id="copyText"
           type="text"
           value="http://ww.short.url/c0opq"
-          onChange={null}
+          readOnly
           ref={linkInput}
         />
         <button className="ui blue right labeled icon button" onClick={handleCopy}>
