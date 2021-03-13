@@ -36,10 +36,8 @@ app.post('/upload', async (req, res) => {
           message: 'No file uploaded'
       });
     } else {
-      //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
       let img = req.files.img
-      
-      
+
       //Use the mv() method to place the file in upload directory (i.e. "uploads")
       img.mv('./uploads/' + img.name)
       
@@ -50,17 +48,13 @@ app.post('/upload', async (req, res) => {
         }
       })
 
-      await newImg.save()
+      const data = await newImg.save()
 
       //send response
       res.send({
           status: true,
           message: 'File is uploaded',
-          data: {
-              name: img.name,
-              mimetype: img.mimetype,
-              size: img.size
-          }
+          id: data.id
       })
     }
   } catch (err) {

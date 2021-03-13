@@ -142,7 +142,7 @@ const UploadedImg = ({
       <div className="ui action input">
         <Input
           type="text"
-          value="http://ww.short.url/c0opq"
+          value={`${window.location.origin}/${downloaded.items.id}`}
           readOnly
           ref={linkInput}
         />

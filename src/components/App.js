@@ -96,6 +96,7 @@ const App = () => {
     .then(result => {
       console.log('Success:', result);
       setLoading(false)
+      history.push(`/${result.id}`)
     })
     .catch(error => {
       console.error('Error:', error);
