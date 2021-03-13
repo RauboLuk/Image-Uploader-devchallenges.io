@@ -93,18 +93,9 @@ const UploadedImg = ({
   const linkInput = useRef(null)
 
   const handleCopy = (e) => {
-    var copyText = document.querySelector("#input");
-    copyText.select();
-    document.execCommand("copy");
-  }
-
-
-  function paste() {
+    e.preventDefault()
     linkInput.current.select()
-    document.execCommand("copy");
-    // var copyText = document.querySelector("#input");
-    // copyText.select();
-    // document.execCommand("copy");
+    document.execCommand("copy")
   }
   // TODO check what if there is no item i db
   // if(!downloaded) return (
@@ -136,15 +127,13 @@ const UploadedImg = ({
           id="copyText"
           type="text"
           value="http://ww.short.url/c0opq"
-          onChange={e => handleCopy}
+          onChange={null}
           ref={linkInput}
         />
-        <button className="ui blue right labeled icon button" onChange={e => encodeURI}>
+        <button className="ui blue right labeled icon button" onClick={handleCopy}>
           <i className="copy icon"></i>
           Copy
         </button>
-        <input id="input" type="text"/>
-        <button id="copy" onClick={paste}>Copy</button>
       </div>
     </Frame>
   )
