@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Icon, Input } from 'semantic-ui-react';
+import { useRef } from 'react';
 
 const Frame = styled.div`
   min-width: 402px;
@@ -86,15 +87,33 @@ const LoaderBar = styled.div`
 `
 
 const UploadedImg = ({
-  loading
+  loading,
+  downloaded
 }) => {
-  if(loading) return (
-    <Loading>Loading...
-      <Loader>
-        <LoaderBar />
-      </Loader>
-    </Loading>
-  )
+  const linkInput = useRef(null)
+
+  const handleCopy = (e) => {
+    var copyText = document.querySelector("#input");
+    copyText.select();
+    document.execCommand("copy");
+  }
+
+
+  function paste() {
+    linkInput.current.select()
+    document.execCommand("copy");
+    // var copyText = document.querySelector("#input");
+    // copyText.select();
+    // document.execCommand("copy");
+  }
+  // TODO check what if there is no item i db
+  // if(!downloaded) return (
+  //   <Loading>Loading...
+  //     <Loader>
+  //       <LoaderBar />
+  //     </Loader>
+  //   </Loading>
+  // )
   return (
     <Frame>
       <Header>
@@ -104,17 +123,29 @@ const UploadedImg = ({
         </Title>
       </Header>
       <DragNDrop>
-          <Preview id="output" width="200" alt="Preview" src="https://via.placeholder.com/150C/O"/>
+        {downloaded?.items?.img
+          ?
+          <Preview id="output" width="200" alt="Preview" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>
+          :
+          null
+        }
       </DragNDrop>
-      <Input
-        action={{
-          color: 'blue',
-          labelPosition: 'right',
-          icon: 'copy',
-          content: 'Copy',
-        }}
-        defaultValue='http://ww.short.url/c0opq'
-      />
+      {/* Semantic ui input */}
+      <div className="ui action input">
+        <input
+          id="copyText"
+          type="text"
+          value="http://ww.short.url/c0opq"
+          onChange={e => handleCopy}
+          ref={linkInput}
+        />
+        <button className="ui blue right labeled icon button" onChange={e => encodeURI}>
+          <i className="copy icon"></i>
+          Copy
+        </button>
+        <input id="input" type="text"/>
+        <button id="copy" onClick={paste}>Copy</button>
+      </div>
     </Frame>
   )
 }

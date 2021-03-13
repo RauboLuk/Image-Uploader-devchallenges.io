@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {
-  BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useHistory
 } from "react-router-dom";
 import styled from 'styled-components';
 
@@ -28,7 +28,8 @@ const Frame = styled.div`
 
 // const Button = styled.p`${theme.button}`
 
-function App() {
+const App = () => {
+  let history = useHistory()
   const [imgPreviewUri, setImgPreviewUri] = useState(null)
   const [imgFile, setImgFile] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -48,6 +49,7 @@ function App() {
       .then(data => {
         console.log(data)
         setDownloaded(data)
+        setLoading(false);
       })
   }
 
@@ -103,34 +105,35 @@ function App() {
   }
 
   return (
-    <Router>
-      <Main className="App">
-        <Frame>
-          <Switch>
-            <Route path="/" exact>
-              <Upload
-                error={error}
-                prepareFile={prepareFile}
-                onDragOver={onDragOver}
-                imgPreviewUri={imgPreviewUri}
-                sendPicture={sendPicture}
-                setImgPreviewUri={setImgPreviewUri}
-                uploadFileButton={uploadFileButton}
-                loading={loading}
-              />
-            </Route>
-            <Route path="/:id">
-              <UploadedImg />
-            </Route>
-          </Switch>
-        </Frame>
-        <div>
-          <button onClick={downloadImg}>downloadImg</button>
-          {downloaded && <img alt="downloaded" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
-        </div>
-        <footer>created by LR - devChallenges.io</footer>
-      </Main>
-    </Router>
+    <Main className="App">
+      <Frame>
+        <Switch>
+          <Route path="/" exact>
+            <Upload
+              error={error}
+              prepareFile={prepareFile}
+              onDragOver={onDragOver}
+              imgPreviewUri={imgPreviewUri}
+              sendPicture={sendPicture}
+              setImgPreviewUri={setImgPreviewUri}
+              uploadFileButton={uploadFileButton}
+              loading={loading}
+            />
+          </Route>
+          <Route path="/:id">
+            <UploadedImg
+              loading={loading}
+              downloaded={downloaded}
+            />
+          </Route>
+        </Switch>
+      </Frame>
+      <div>
+        <button onClick={downloadImg}>downloadImg</button>
+        {downloaded && <img alt="downloaded" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
+      </div>
+      <footer>created by LR - devChallenges.io</footer>
+    </Main>
   );
 }
 
