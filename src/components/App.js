@@ -34,8 +34,6 @@ const Footer = styled.footer`
   height: 30px;
 `
 
-// const Button = styled.p`${theme.button}`
-
 const App = () => {
   let history = useHistory()
   const [imgPreviewUri, setImgPreviewUri] = useState(null)
@@ -53,7 +51,7 @@ const App = () => {
   }
 
   const getImg = (id) => {
-    fetch(`http://localhost:5000/upload/${id}`)
+    fetch(`/upload/${id}`)
       .then(response => response.json())
       .then(data => {
         setDownloaded(data)
@@ -64,7 +62,7 @@ const App = () => {
       })
   }
 
-  const uploadFileButton = (event) => {
+  const handleFile = (event) => {
     event.preventDefault();
     let files;
     if(event.target.files) files = event.target.files;
@@ -72,28 +70,18 @@ const App = () => {
     else return;
     if(!files
       || files.length === 0) return;
-    setUploading(true);
-    setImgFile(files[0]);
-    setImgPreviewUri(URL.createObjectURL(files[0]));
-  }
-  
-  // TODO: TypeError: this._drop is not a function at Object.handleEvent
-  const prepareFile = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    console.log(file);
-    // TODO add maxsize
-    if(!file.type
+    if(!files[0].type
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
         handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
         return null;
     }
-    if(file.size > 524288) {
+    if(files[0].size > 524288) {
         handleError('Max file size 0.5MB');
         return null;
     }
-    setImgFile(file);
-    setImgPreviewUri(URL.createObjectURL(file));
+    setUploading(true);
+    setImgFile(files[0]);
+    setImgPreviewUri(URL.createObjectURL(files[0]));
   }
 
   const onDragOver = (event) => {
@@ -101,13 +89,13 @@ const App = () => {
     event.preventDefault();
   }
 
-  const sendPicture = (e) => {
+  const uploadPicture = (e) => {
     setLoading(true)
     e.preventDefault();
     const formData = new FormData();
 
     formData.append('img', imgFile);
-    fetch('http://localhost:5000/upload', {
+    fetch('/upload', {
       method: 'POST',
       body: formData,
     })
@@ -129,12 +117,11 @@ const App = () => {
           <Route path="/" exact>
             <Upload
               error={error}
-              prepareFile={uploadFileButton}
+              handleFile={handleFile}
               onDragOver={onDragOver}
               imgPreviewUri={imgPreviewUri}
-              sendPicture={sendPicture}
               setImgPreviewUri={setImgPreviewUri}
-              uploadFileButton={uploadFileButton}
+              uploadPicture={uploadPicture}
               loading={loading}
             />
           </Route>

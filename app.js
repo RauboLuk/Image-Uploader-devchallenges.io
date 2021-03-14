@@ -2,7 +2,7 @@ const path = require('path');
 const dotenv = require('dotenv')
 const express = require('express')
 const mongoose = require('mongoose')
-const cors = require('cors')
+// const cors = require('cors')
 const fileUpload = require('express-fileupload')
 
 const app = express()
@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URL,
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, () => {
-    console.log('connected')
+    console.log('Mongo connected')
 });
 
 app.use(fileUpload({
@@ -25,8 +25,8 @@ app.use(fileUpload({
 }));
 
 app.use(express.json())
-app.use(express.static('dist'))
-app.use(cors())
+app.use(express.static('build'))
+// app.use(cors())
 
 app.post('/upload', async (req, res) => {
   try {
@@ -85,6 +85,10 @@ app.get('/health', (req, res) => {
 app.get('/version', (req, res) => {
   res.send('1') // change this string to ensure a new version deployed
 })
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`)

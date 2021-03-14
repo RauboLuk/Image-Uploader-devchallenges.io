@@ -123,12 +123,11 @@ const LoaderBar = styled.div`
 
 const Upload = ({
   error,
-  prepareFile,
+  handleFile,
   onDragOver,
   imgPreviewUri,
-  sendPicture,
   setImgPreviewUri,
-  uploadFileButton,
+  uploadPicture,
   loading
 }) => {
   if(loading) return (
@@ -148,7 +147,7 @@ const Upload = ({
         {error ? error : 'File should be Jpeg, Png,...'}
         </Subtitle>
       </Header>
-      <DragNDrop onDrop={prepareFile} onDragOver={onDragOver} isPicture={!!imgPreviewUri}>
+      <DragNDrop onDrop={handleFile} onDragOver={onDragOver} isPicture={!!imgPreviewUri}>
           {!!imgPreviewUri
             ? <Preview id="output" width="200" alt="Preview" src={imgPreviewUri}/>
             : <>
@@ -159,7 +158,7 @@ const Upload = ({
       </DragNDrop>
       {!!imgPreviewUri
         ? <div>
-            <Button onClick={sendPicture}>Upload</Button>
+            <Button onClick={uploadPicture}>Upload</Button>
             <Button onClick={() =>{setImgPreviewUri(null)}} color="cancel">Cancel</Button>
           </div>
         : <>
@@ -169,7 +168,7 @@ const Upload = ({
           <label htmlFor="button">
             <Button>Choose a file</Button>
           </label>
-          <input hidden id="button" type="file" accept="image/*" onChange={uploadFileButton}/>
+          <input hidden id="button" type="file" accept="image/*" onChange={handleFile}/>
         </>
       }
     </Frame>
