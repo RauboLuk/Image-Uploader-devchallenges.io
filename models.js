@@ -4,7 +4,8 @@ const imgSchema = new mongoose.Schema({
   img: {
     data: Buffer,
     contentType: String
-  }
+  },
+  createdAt: { type: Date, expires: 180, default: Date.now()}
 })
 
 imgSchema.set('toJSON', {

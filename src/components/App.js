@@ -18,6 +18,7 @@ const Main = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
+  padding-bottom: 30px;
 `;
 
 const Frame = styled.div`
@@ -25,6 +26,13 @@ const Frame = styled.div`
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
+
+const Footer = styled.footer`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+`
 
 // const Button = styled.p`${theme.button}`
 
@@ -50,6 +58,9 @@ const App = () => {
         console.log(data)
         setDownloaded(data)
         setLoading(false)
+      })
+      .catch(e => {
+        setDownloaded({})
       })
   }
 
@@ -130,11 +141,7 @@ const App = () => {
           </Route>
         </Switch>
       </Frame>
-      <div>
-        <button onClick={getImg}>downloadImg</button>
-        {downloaded && <img alt="downloaded" src={`data:image/*;base64,${Buffer.from(downloaded.items.img.data.data).toString('base64')}`}/>}
-      </div>
-      <footer>created by LR - devChallenges.io</footer>
+      <Footer>Łukasz Raubo @ Devchallenges.io</Footer>
     </Main>
   );
 }

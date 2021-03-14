@@ -114,7 +114,6 @@ const UploadedImg = ({
     linkInput.current.select()
     document.execCommand("copy")
   }
-  // TODO check what if there is no item i db
   if(loading || !downloaded) return (
     <Loading>Loading...
       <Loader>
@@ -122,6 +121,8 @@ const UploadedImg = ({
       </Loader>
     </Loading>
   )
+  if(!downloaded.items) return <p>Image not found</p>
+  
   return (
     <Frame>
       <Header>

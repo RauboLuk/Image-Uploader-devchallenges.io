@@ -24,7 +24,7 @@ app.use(fileUpload({
   createParentPath: true
 }));
 
-app.use(express.json()) // for parsing application/json
+app.use(express.json())
 app.use(express.static('dist'))
 app.use(cors())
 
@@ -63,8 +63,10 @@ app.post('/upload', async (req, res) => {
 })
 
 app.get('/upload/:id', (req, res) => {
-  // TODO error when id is incorrect
-  const id = mongoose.Types.ObjectId(req.params.id)
+  const id = req.params.id
+  if( !mongoose.Types.ObjectId.isValid(id) ){
+    return res.sendStatus(400);
+  }
   imgModel.findById(id, (err, items) => {
     if (err) {
       console.log(err);
