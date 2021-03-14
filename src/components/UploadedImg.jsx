@@ -100,12 +100,15 @@ const Input = styled.input`
 const UploadedImg = ({
   loading,
   downloaded,
-  getImg
+  getImg,
+  setLoading,
+  uploading
 }) => {
   const linkInput = useRef(null)
   const { id } = useParams();
 
   useEffect(() => {
+    setLoading(true)
     getImg(id);
   }, [])
 
@@ -122,15 +125,17 @@ const UploadedImg = ({
     </Loading>
   )
   if(!downloaded.items) return <p>Image not found</p>
-  
+
   return (
     <Frame>
-      <Header>
-      <Icon name='check circle' size='big' color="green" />
-        <Title>
-          Uploaded Successfully!
-        </Title>
-      </Header>
+      {uploading &&
+        <Header>
+        <Icon name='check circle' size='big' color="green" />
+          <Title>
+            Uploaded Successfully!
+          </Title>
+        </Header>
+      }
       <DragNDrop>
         {downloaded?.items?.img
           ?

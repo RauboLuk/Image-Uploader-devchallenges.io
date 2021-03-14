@@ -43,6 +43,7 @@ const App = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [downloaded, setDownloaded] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const handleError = (msg) => {
     setError(msg)
@@ -55,7 +56,6 @@ const App = () => {
     fetch(`http://localhost:5000/upload/${id}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         setDownloaded(data)
         setLoading(false)
       })
@@ -66,22 +66,30 @@ const App = () => {
 
   const uploadFileButton = (event) => {
     event.preventDefault();
-    console.log(event.target.files[0]);
-    console.log('dt', event.target.dataTransfer);
-    if(!event.target.files
-      || event.target.files.length === 0) return;
-    setImgFile(event.target.files[0]);
-    setImgPreviewUri(URL.createObjectURL(event.target.files[0]));
+    let files;
+    if(event.target.files) files = event.target.files;
+    else if(event.dataTransfer.files) files = event.dataTransfer.files;
+    else return;
+    if(!files
+      || files.length === 0) return;
+    setUploading(true);
+    setImgFile(files[0]);
+    setImgPreviewUri(URL.createObjectURL(files[0]));
   }
   
   // TODO: TypeError: this._drop is not a function at Object.handleEvent
   const prepareFile = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
+    console.log(file);
     // TODO add maxsize
     if(!file.type
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
         handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
+        return null;
+    }
+    if(file.size > 524288) {
+        handleError('Max file size 0.5MB');
         return null;
     }
     setImgFile(file);
@@ -105,12 +113,10 @@ const App = () => {
     })
     .then(response => response.json())
     .then(result => {
-      console.log('Success:', result);
       setLoading(false)
       history.push(`/${result.id}`)
     })
     .catch(error => {
-      console.error('Error:', error);
       handleError('Error. Please try again later...');
       setLoading(false)
     });
@@ -123,7 +129,7 @@ const App = () => {
           <Route path="/" exact>
             <Upload
               error={error}
-              prepareFile={prepareFile}
+              prepareFile={uploadFileButton}
               onDragOver={onDragOver}
               imgPreviewUri={imgPreviewUri}
               sendPicture={sendPicture}
@@ -137,6 +143,8 @@ const App = () => {
               loading={loading}
               downloaded={downloaded}
               getImg={getImg}
+              setLoading={setLoading}
+              uploading={uploading}
             />
           </Route>
         </Switch>
