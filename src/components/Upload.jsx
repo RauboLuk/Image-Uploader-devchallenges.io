@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Icon } from 'semantic-ui-react';
+import styled from 'styled-components'
+import { Icon } from 'semantic-ui-react'
 
 const Frame = styled.div`
   min-width: 402px;
@@ -19,14 +19,14 @@ const Title = styled.h1`
   color: #4F4F4F;
   font-size: 18px;
   line-height: 27px;
-`;
+`
 
 const Subtitle = styled.p`
   color: ${props => props.color ?
     'firebrick' : '#828282'};
   font-size: 10px;
   line-height: 15px;
-`;
+`
 
 const DragNDrop = styled.div`
   background: #F6F8FB;
@@ -40,7 +40,7 @@ const DragNDrop = styled.div`
   border: 1px dashed;
   border-color: ${props => props.isPicture ?
     "green" : "#97BEF4"}
-`;
+`
 
 const DnDText = styled.p`
   font-size: 12px;
@@ -55,7 +55,7 @@ const Preview = styled.img`
   height: auto;
   width: auto;
   border-radius: 12px;
-`;
+`
 
 const Or = styled.p`
   font-size: 12px;

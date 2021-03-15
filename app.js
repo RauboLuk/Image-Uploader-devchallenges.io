@@ -18,11 +18,11 @@ mongoose.connect(process.env.MONGO_URL,
     useUnifiedTopology: true
   }, () => {
     console.log('Mongo connected')
-});
+})
 
 app.use(fileUpload({
   createParentPath: true
-}));
+}))
 
 app.use(express.json())
 app.use(express.static('build'))
@@ -33,14 +33,9 @@ app.post('/upload', async (req, res) => {
     if(!req.files) {
       res.send({
           status: false,
-          message: 'No file uploaded'
       });
     } else {
       let img = req.files.img
-
-      //Use the mv() method to place the file in upload directory (i.e. "uploads")
-      img.mv('./uploads/' + img.name)
-      
       const newImg = new imgModel({
         img: {
           data: img.data,
@@ -49,11 +44,8 @@ app.post('/upload', async (req, res) => {
       })
 
       const data = await newImg.save()
-
-      //send response
       res.send({
           status: true,
-          message: 'File is uploaded',
           id: data.id
       })
     }
@@ -65,15 +57,15 @@ app.post('/upload', async (req, res) => {
 app.get('/upload/:id', (req, res) => {
   const id = req.params.id
   if( !mongoose.Types.ObjectId.isValid(id) ){
-    return res.sendStatus(400);
+    return res.sendStatus(400)
   }
   imgModel.findById(id, (err, items) => {
     if (err) {
-      console.log(err);
-      res.status(500).send('An error occurred', err);
+      console.log(err)
+      res.status(500).send('An error occurred', err)
     }
     else {
-      res.send({ items });
+      res.send({ items })
     }
   })
 })
@@ -82,14 +74,10 @@ app.get('/health', (req, res) => {
   res.send('ok')
 })
 
-app.get('/version', (req, res) => {
-  res.send('1') // change this string to ensure a new version deployed
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 app.listen(PORT, () => {
-  console.log(`server started on port ${PORT}`)
+  console.log(`Server started on port ${PORT}`)
 })

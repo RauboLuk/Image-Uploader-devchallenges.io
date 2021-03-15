@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Switch,
   Route,
   useHistory
-} from "react-router-dom";
-import styled from 'styled-components';
+} from "react-router-dom"
+import styled from 'styled-components'
 
-import Upload from './Upload';
-import UploadedImg from './UploadedImg';
+import Upload from './Upload'
+import UploadedImg from './UploadedImg'
 
 const Main = styled.div`
   background: #FAFAFB;
@@ -19,13 +19,13 @@ const Main = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
-`;
+`
 
 const Frame = styled.div`
   background: #FFFFFF;
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-`;
+`
 
 const Footer = styled.footer`
   position: absolute;
@@ -58,43 +58,45 @@ const App = () => {
         setLoading(false)
       })
       .catch(e => {
-        setDownloaded({})
+        history.push('/')
+        setLoading(false)
+        handleError('File not found')
       })
   }
 
   const handleFile = (event) => {
-    event.preventDefault();
-    let files;
-    if(event.target.files) files = event.target.files;
-    else if(event.dataTransfer.files) files = event.dataTransfer.files;
-    else return;
+    event.preventDefault()
+    let files
+    if(event.target.files) files = event.target.files
+    else if(event.dataTransfer.files) files = event.dataTransfer.files
+    else return
     if(!files
-      || files.length === 0) return;
+      || files.length === 0) return
     if(!files[0].type
       .match(/^image\/(jpeg|jpg|pjpeg|png)$/)) {
-        handleError('Allowed file formats .jpeg .jpg .pjpeg .png');
-        return null;
+        handleError('Allowed file formats .jpeg .jpg .pjpeg .png')
+        return null
     }
     if(files[0].size > 524288) {
         handleError('Max file size 0.5MB');
-        return null;
+        return null
     }
-    setUploading(true);
-    setImgFile(files[0]);
-    setImgPreviewUri(URL.createObjectURL(files[0]));
+    setUploading(true)
+    setImgFile(files[0])
+    setImgPreviewUri(URL.createObjectURL(files[0]))
   }
 
   const onDragOver = (event) => {
-    event.dataTransfer.dropEffect = 'move';
-    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move'
+    event.preventDefault()
   }
 
   const uploadPicture = (e) => {
     setLoading(true)
-    e.preventDefault();
-    const formData = new FormData();
+    e.preventDefault()
+    const formData = new FormData()
 
-    formData.append('img', imgFile);
+    formData.append('img', imgFile)
     fetch('/upload', {
       method: 'POST',
       body: formData,
@@ -107,7 +109,7 @@ const App = () => {
     .catch(error => {
       handleError('Error. Please try again later...');
       setLoading(false)
-    });
+    })
   }
 
   return (
@@ -138,7 +140,7 @@ const App = () => {
       </Frame>
       <Footer>Łukasz Raubo @ Devchallenges.io</Footer>
     </Main>
-  );
+  )
 }
 
-export default App;
+export default App

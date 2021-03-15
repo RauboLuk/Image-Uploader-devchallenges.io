@@ -16,4 +16,4 @@ imgSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Img', imgSchema);
+module.exports = mongoose.model('Img', imgSchema)

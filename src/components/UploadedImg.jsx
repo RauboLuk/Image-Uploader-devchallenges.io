@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { Icon } from 'semantic-ui-react';
-import { useEffect, useRef } from 'react';
-import { useParams } from 'react-router';
+import styled from 'styled-components'
+import { Icon } from 'semantic-ui-react'
+import { useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 
 const Frame = styled.div`
   min-width: 402px;
@@ -105,7 +105,7 @@ const UploadedImg = ({
   uploading
 }) => {
   const linkInput = useRef(null)
-  const { id } = useParams();
+  const { id } = useParams()
 
   useEffect(() => {
     setLoading(true)
