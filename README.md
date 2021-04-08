@@ -36,6 +36,7 @@
 ## Overview
 
 ![screenshot](assets/imageuploader0.gif)
+ETC: ~19h
 
 ### Built With
 
